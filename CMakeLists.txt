@@ -19,7 +19,6 @@ find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 set(dependencies
         rclcpp
         rclcpp_action
-        tf2_ros
         
         )
 add_library(${PROJECT_NAME} SHARED src/utils.cpp src/geometry.cpp)
