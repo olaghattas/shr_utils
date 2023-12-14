@@ -19,9 +19,8 @@ find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 set(dependencies
         rclcpp
         rclcpp_action
-        nav2_msgs
         tf2_ros
-        shr_msgs
+        
         )
 add_library(${PROJECT_NAME} SHARED src/utils.cpp src/geometry.cpp)
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
