@@ -8,6 +8,7 @@
 namespace shr_utils {
 
     std::pair<std::vector<Eigen::MatrixXd>, std::vector<std::string>> load_meshes(const std::string &file_name);
+    std::pair<std::vector<Eigen::MatrixXd>, std::vector<std::string>> load_meshes_squares(const std::string &file_name);
 
     bool PointInTriangle(const Eigen::Vector2d &p, const Eigen::Vector2d &a, const Eigen::Vector2d &b,
                          const Eigen::Vector2d &c);

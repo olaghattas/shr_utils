@@ -6,7 +6,7 @@
 
 
 #include "shr_utils/geometry.hpp"
-
+#include <iostream>
 namespace shr_utils {
 
     std::pair<std::vector<Eigen::MatrixXd>, std::vector<std::string>> load_meshes(const std::string &file_name) {
@@ -35,6 +35,42 @@ namespace shr_utils {
                 }
             }
 
+            Eigen::MatrixXd verts = Eigen::Map<Eigen::MatrixXd>(vert.data(), 3, vert.size() / 3);
+            out.push_back(verts);
+            out2.push_back(mesh->mName.data);
+        }
+
+        return {out, out2};
+    }
+
+    std::pair<std::vector<Eigen::MatrixXd>, std::vector<std::string>> load_meshes_squares(const std::string &file_name) {
+        //  verts rows represent x,y,z and columns represent vertices
+        std::vector<Eigen::MatrixXd> out;
+        std::vector<std::string> out2;
+        Assimp::Importer importer;
+
+        // Load the first mesh
+        const aiScene *scene = importer.ReadFile(file_name, 0);
+        if (!scene || !scene->mRootNode) {
+            throw std::runtime_error("Failed to load");
+        }
+
+        for (int i = 0; i < scene->mNumMeshes; i++) {
+            const aiMesh *mesh = scene->mMeshes[i];
+
+            std::vector<double> vert(mesh->mNumFaces * 3 * 4);
+            int count = 0;
+            for (int f = 0; f < mesh->mNumFaces; f++) {
+                auto simp_ind = mesh->mFaces[f];
+                for (int i = 0; i < simp_ind.mNumIndices; i++) {
+                    auto ind = simp_ind.mIndices[i];
+                    vert[count++] = mesh->mVertices[ind].x;
+                    vert[count++] = mesh->mVertices[ind].y;
+                    vert[count++] = mesh->mVertices[ind].z;
+//                    std::cout << "name: " << mesh->mName.data << " x:  " << mesh->mVertices[ind].x <<  " y:  " << mesh->mVertices[ind].y <<  " z:  " << mesh->mVertices[ind].z << std::endl;
+                }
+            }
+//            std::cout << "vert.size()" << vert.size() << std::endl;
             Eigen::MatrixXd verts = Eigen::Map<Eigen::MatrixXd>(vert.data(), 3, vert.size() / 3);
             out.push_back(verts);
             out2.push_back(mesh->mName.data);
